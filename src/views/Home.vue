@@ -1,5 +1,6 @@
 <script lang="ts">
 import { onMounted, ref } from 'vue'
+import HelloWorld from '../components/HelloWorld.vue';
 
 interface IPost {
   albumId: number,
@@ -10,6 +11,7 @@ interface IPost {
 }
 
 export default {
+  name: "Home",
     setup() {
         const posts = ref<IPost[]>([]);
         const isLoading = ref(false);
@@ -17,18 +19,20 @@ export default {
         const fetchPosts = async () => {
             isLoading.value = true;
             fetch("https://jsonplaceholder.typicode.com/albums/1/photos")
-              .then(res => res.json())
-              .then(res => {
-              posts.value = res;
-              isLoading.value = false;
-              })
+                .then(res => res.json())
+                .then(res => {
+                posts.value = res;
+                isLoading.value = false;
+            });
         };
-        onMounted(fetchPosts);
-        return { 
-          posts, 
-          isLoading
+        onMounted(fetchPosts)
+        //onMounted(() => console.log("pode ser usado para executar o código após o componente concluir a renderização inicial e criar os nós DOM. Existem também outros hooks que serão chamados em diferentes estágios do ciclo de vida, como o onUpdated, onUnmounted entre outros"));
+
+        return {
+            posts,
+            isLoading
         };
-    },
+    }
 }
 </script>
 
@@ -69,6 +73,7 @@ export default {
   }
   .box img {
     max-width: 150px;
+    border-radius: 4px; 
   }
   .title {
     display: -webkit-box;

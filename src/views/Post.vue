@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import HelloWorld from '../components/HelloWorld.vue';
 
 interface IPost {
   albumId: number,
@@ -10,29 +11,33 @@ interface IPost {
   url: string,
 }
 
-    export default {
-        setup() {
-            const post = ref<IPost>()
-            const isLoading = ref(false);
-            const route = useRoute()
-            const id = Number(route.params.id);
-            
-            const fetchPost = (id:Number) => {
-                isLoading.value = true
-                fetch("https://jsonplaceholder.typicode.com/albums/1/photos")
+export default {
+    name: 'Post',
+    setup() {
+        const post = ref<IPost>();
+        const isLoading = ref(false);
+        const route = useRoute();
+        const id = Number(route.params.id);
+
+        const fetchPost = (id: Number) => {
+            isLoading.value = true;
+            fetch("https://jsonplaceholder.typicode.com/albums/1/photos")
                 .then(res => res.json())
                 .then(res => {
-                    isLoading.value = false
-                    post.value = res.filter((post:IPost) => post.id === id)[0]
-                })
-            }
-            onMounted(() => fetchPost(id));
-            return {
-                post,
-                isLoading,
-            }
-        }
-    }
+                isLoading.value = false;
+                post.value = res.filter((post: IPost) => post.id === id)[0];
+            });
+        };
+        
+        onMounted(() => fetchPost(id));
+
+        return {
+            post,
+            isLoading,
+        };
+    },
+    components: { HelloWorld }
+}
 </script>
 
 <template>
